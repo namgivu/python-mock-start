@@ -1,5 +1,6 @@
 atomicwrites==1.2.1
 attrs==18.2.0
+mockito==1.1.1
 more-itertools==4.3.0
 pluggy==0.8.0
 py==1.7.0
