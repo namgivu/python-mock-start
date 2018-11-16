@@ -20,7 +20,7 @@ ln -s $(pyenv root)/versions/python-mock-start venv
 # install pip packages
 cd "$CODE"
 pip install --upgrade pip
-pip install -r requirements && pip freeze > requirements.lock
+pip install -r requirements.txt && pip freeze > requirements.lock
 
 # run test
 pytest                                           # run all
