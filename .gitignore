@@ -102,3 +102,16 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+
+##region THIS_APP 's ignored items
+.idea/dictionaries/
+.idea/misc.xml
+.idea/modules.xml
+.idea/Project_Default.xml
+.idea/python-mock-start.iml
+.idea/workspace.xml
+
+venv
+##endregion
