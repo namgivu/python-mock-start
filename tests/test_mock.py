@@ -28,8 +28,8 @@ class Test00(unittest.TestCase):
         assert r == 333 != a+b == 23
 
 
-    #region test_some_heavy_method__w_mockito
-    from unittest.mock import patch, MagicMock
+    #region test_some_heavy_method__w_builtin
+    from unittest.mock import patch, MagicMock # ref. https://docs.python.org/3/library/unittest.mock.html#quick-guide
 
     @patch('services.some_service.some_heavy_method', MagicMock(return_value=4444)) # mocking some_heavy_method() to return 4444
     def test_some_heavy_method__w_builtin1(self):
