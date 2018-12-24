@@ -112,6 +112,7 @@ venv.bak/
 .idea/Project_Default.xml
 .idea/python-mock-start.iml
 .idea/workspace.xml
+.idea/other.xml
 
-venv
+.venv/
 ##endregion
