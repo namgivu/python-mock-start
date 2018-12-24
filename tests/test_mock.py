@@ -1,4 +1,5 @@
-import unittest
+import unittest, pytest, os
+from unittest.mock import patch, MagicMock  # ref. https://docs.python.org/3/library/unittest.mock.html#quick-guide
 
 from services import some_service
 
@@ -29,8 +30,7 @@ class Test00(unittest.TestCase):
 
 
     #region test_some_heavy_method__w_builtin
-    from unittest.mock import patch, MagicMock # ref. https://docs.python.org/3/library/unittest.mock.html#quick-guide
-
+    '''use decorator'''
     @patch('services.some_service.some_heavy_method', MagicMock(return_value=4444)) # mocking some_heavy_method() to return 4444
     def test_some_heavy_method__w_builtin1(self):
         a=1; b=22
@@ -38,12 +38,24 @@ class Test00(unittest.TestCase):
         assert r == 4444 != a+b == 23
 
 
-    mocked_some_heavy_method = MagicMock()
-    mocked_some_heavy_method.return_value = 55555
-
-    @patch('services.some_service.some_heavy_method', mocked_some_heavy_method)
+    '''decorator with value set from mock object'''
+    m = MagicMock()
+    m.return_value = 55555
+    @patch('services.some_service.some_heavy_method', m)
     def test_some_heavy_method__w_builtin2(self):
         a=1; b=22
         r = some_service.some_heavy_method(a, b)
         assert r == 55555 != a+b == 23
+
+
+    '''no decorator patch directly using mock object (so as to unmock later)'''
+    def test_some_heavy_method__w_builtin3(self):
+        m = MagicMock()
+        m.return_value = 677888
+        some_service.some_heavy_method = m
+
+        a=1; b=22
+        r = some_service.some_heavy_method(a, b)
+        assert r == 677888 != a+b == 23
+
     #endregion
