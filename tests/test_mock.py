@@ -68,8 +68,9 @@ class Test(unittest.TestCase):
     '''no decorator patch - directly using patch object'''
     def test_some_heavy_method__w_builtin2b(self):
         pt = patch('services.some_service.some_heavy_method', MagicMock(return_value=677888)); pt.start(); self.addCleanup(pt.stop)
-        # NOTE the pt.stop() will reset mocked method to its original code
+        # NOTE the pt.stop() will auto-reset mocked method to its original code
 
+        # check mocked method outcome
         a=1; b=22; r = some_service.some_heavy_method(a, b)
         assert r == 677888 != a+b == 23
 
