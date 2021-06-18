@@ -20,11 +20,11 @@ def tearDownModule():
 
 class Test(unittest.TestCase):
 
-    def test_some_heavy_method__w_mockito(self):
-        MOCKED_VAL = 'some mocked value here'
+    def test_mock__os_environ_get(self):
+        MOCKED_VAL = 'some mocked value here @ test_mock__os_environ_get'
 
         # mock target code os.environ.get(:any)
-        when(os.environ).get(Ellipsis).thenReturn(MOCKED_VAL)
+        when(os.environ).get(...).thenReturn(MOCKED_VAL)
         self.addCleanup(unstub)  # register mockito's unstub() method to unittest's cleanup
 
         ACT = os.environ.get('SOME_VAR')
