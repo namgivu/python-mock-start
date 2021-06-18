@@ -39,7 +39,7 @@ class Test(unittest.TestCase):
         MOCKED_VAL = 'some mocked value @ SOME_VAR'
         MOCKED_DICT = {'SOME_VAR': MOCKED_VAL}
 
-        # mock target code os.environ[:any]
+        # mock target code os.environ[:any]  #TODO asked on SO at https://stackoverflow.com/q/68030745/248616
         # when(os).environ[...].thenReturn(MOCKED_DICT)  #FIXME  #E       TypeError: 'StubbedInvocation' object is not subscriptable
         # when2(os.environ).thenReturn(MOCKED_DICT)      #FIXME  #E       AttributeError: 'function' object has no attribute 'get'
         # patch(os.environ, lambda str: MOCKED_DICT)     #FIXME  #E       AttributeError: 'function' object has no attribute 'get'
@@ -49,3 +49,19 @@ class Test(unittest.TestCase):
         ACT_bybracket = os.environ['SOME_VAR']
         assert ACT_bybracket == MOCKED_DICT.get('SOME_VAR')
         assert ACT_bybracket != BEFORE_MOCKED_VAL
+
+
+    def test_mock__patchdict(self):  # current working solution
+        MOCKED_VAL = 'some mocked value @ SOME_VAR'
+        MOCKED_DICT = {'SOME_VAR': MOCKED_VAL}
+
+        from unittest.mock import patch ; p=patch.dict(in_dict=os.environ, values=MOCKED_DICT, clear=True) ; p.start()  # mock dict ref. ref. https://stackoverflow.com/a/44931447/248616
+        self.addCleanup(p.stop)  # register mockito's unstub() method to unittest's cleanup
+
+        ACT_bybracket = os.environ['SOME_VAR']
+        assert ACT_bybracket == MOCKED_DICT.get('SOME_VAR')
+        assert ACT_bybracket != BEFORE_MOCKED_VAL
+
+        ACT_byget = os.environ.get('SOME_VAR')
+        assert ACT_byget == MOCKED_DICT.get('SOME_VAR')
+        assert ACT_byget != BEFORE_MOCKED_VAL
