@@ -2,8 +2,7 @@ import os
 from dotenv import load_dotenv
 
 import unittest
-from mockito import when, unstub
-
+from mockito import when, when2, unstub, patch
 
 PWD = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(dotenv_path=f'{PWD}/.env', override=False)
@@ -31,14 +30,28 @@ class Test(unittest.TestCase):
         assert ACT == MOCKED_VAL
         assert ACT != BEFORE_MOCKED_VAL
 
+        # ACT2 = os.environ['SOME_VAR']  #NOTE this still NOT mocked and below :assert will fail --> solve it by test_mock__os_environ_dict()
+        # assert ACT2 == MOCKED_VAL
+        # assert ACT2 != BEFORE_MOCKED_VAL
+
 
     def TODOtest_mock__os_environ_dict(self):
-        MOCKED_VAL = 'some mocked value here @ test_mock__os_environ_dict'
+        MOCKED_DICT = {
+            'SOME_VAR': 122,
+            'mocked key in os.environ 00': 1,
+            'mocked key in os.environ 02': '22',
+        }
 
         # mock target code os.environ[:any]
-        when(os).environ[...].thenReturn(MOCKED_VAL)  #FIXME  #ERROR TypeError: 'StubbedInvocation' object is not subscriptable
+        when(os).environ[...].thenReturn(MOCKED_DICT)  #FIXME  #E       TypeError: 'StubbedInvocation' object is not subscriptable
+        # when2(os.environ).thenReturn(MOCKED_DICT)      #FIXME  #E       AttributeError: 'function' object has no attribute 'get'
+        # patch(os.environ, lambda str: MOCKED_DICT)     #FIXME  #E       AttributeError: 'function' object has no attribute 'get'
         self.addCleanup(unstub)  # register mockito's unstub() method to unittest's cleanup
 
-        ACT = os.environ.get('SOME_VAR')
-        assert ACT == MOCKED_VAL
-        assert ACT != BEFORE_MOCKED_VAL
+        ACT_bybracket = os.environ['SOME_VAR']
+        assert ACT_bybracket == MOCKED_DICT.get('SOME_VAR')
+        assert ACT_bybracket != BEFORE_MOCKED_VAL
+
+        ACT_byget = os.environ.get('SOME_VAR')
+        assert ACT_byget == MOCKED_DICT.get('SOME_VAR')
+        assert ACT_byget != BEFORE_MOCKED_VAL
