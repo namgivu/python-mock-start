@@ -36,7 +36,7 @@ class Test(unittest.TestCase):
         MOCKED_VAL = 'some mocked value here @ test_mock__os_environ_dict'
 
         # mock target code os.environ[:any]
-        when(os).environ[...].thenReturn(MOCKED_VAL)  #ERROR TypeError: 'StubbedInvocation' object is not subscriptable
+        when(os).environ[...].thenReturn(MOCKED_VAL)  #FIXME  #ERROR TypeError: 'StubbedInvocation' object is not subscriptable
         self.addCleanup(unstub)  # register mockito's unstub() method to unittest's cleanup
 
         ACT = os.environ.get('SOME_VAR')
